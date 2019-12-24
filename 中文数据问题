@@ -1,0 +1,29 @@
+中文数据问题的本质是字符集问题
+计算机只识别二进制，人类更多的是识别符号，需要有一个二进制与字符的对应关系--字符集
+
+-- 插入中文数据
+  -- 查看服务器字符集
+  show character set;
+  
+  -- 查看服务器默认的对外处理字符集
+  show variables like 'character_set';
+  
+  -- 设置服务器的默认字符集为客户端使用字符集
+  set character_set_client=gbk;
+  
+  -- 插入数据
+  insert into my_students values(5, 'sdj0005', '张三', '男');
+  
+  -- 查看数据乱码问题
+    -- 设置服务器输出数据字符集为客户端使用字符集
+    set character_set_results = gbk;
+    
+ set 变量 = 值;   这宗修改知识会话级别（当前客户端，当次链接有效）
+ 
+ 设置服务器对客户端的字符集的认识 可以使用快捷方式：set names 字符集
+ -- 快捷设置字符集
+ set names gbk;
+ 
+ 
+
+
