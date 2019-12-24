@@ -1,0 +1,38 @@
+数据库基本操作分类
+根据操作对象分为三类：
+  库操作：
+    对数据库的增删改查：
+      新增数据库：create database 数据库名称 [库选项]
+      库选项：字符集设定/校对集设定
+      -- 创建数据库，并设定数据集为utf8
+      create database mydatabase charset utf8;
+      -- 查看所有数据库
+      show databases;
+      -- 查看指定部分数据库：模糊查询
+      show databases like 'pattern'; -- pattern是匹配模式
+      %; 表示匹配多个字符
+      _; 表示匹配单个字符
+      show databases like 'information\_%';
+      show databases like 'information_%';
+      
+      -- 查看数据库的创建语句: show creata database 数据库名称
+      show create database mydatabase;
+      -- 更新数据库: 
+      数据库名称不可更改
+      数据库的修改仅限修改库选项： 字符集和校对集（校对集依赖字符集）
+      alter database 数据库名称 [库选项]
+      charset/character set [=] 字符集
+      -- 修改数据库的字符集
+      alter database mydatabase charset GBK;
+      -- 删除数据库
+      所有的操作中： 删除是最简单的
+      drop database 数据库名称;
+      drop database mydatabase;
+      删除语句之后发生了什么:
+      1. 在数据库内部看不到对应的数据库
+      2. 在对应的存储的文件夹内：数据库名称对应的文件夹也被删除（级联删除）
+      注意：数据的删除需要谨慎（应该限进行备份）
+    
+  表操作
+  数据操作
+ 
