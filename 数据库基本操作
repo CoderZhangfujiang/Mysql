@@ -33,6 +33,87 @@
       2. 在对应的存储的文件夹内：数据库名称对应的文件夹也被删除（级联删除）
       注意：数据的删除需要谨慎（应该限进行备份）
     
-  表操作
+  表操作:
+    -- 新增表
+    create table [if not exists] 表明 (
+      字段名字 数据类型,
+      字段名字 数据类型,
+      字段名字 数据类型,
+      字段名字 数据类型   -- 最后一行不需要逗号
+      )[表选项]；
+    表选项：控制表的表现
+      字符集: charset/character set 具体字符集;
+      校对集: collate 具体校对集
+      存储引擎: engine 具体的存储引擎(innodb和myisam)
+    -- 创建表
+    create table if not exists mydatabase.student(  -- 显式的指定数据库
+      name varchar(10),
+      age int,
+      gender varchar(10)
+      );
+      
+    use mydatabase; -- 隐式的指定数据库
+    create table if not exists student(
+      name varchar(10),
+      age int,
+      gender varchar(10)
+      );
+    任何一个表的设计都必须指定数据库
+  
+  
+    -- 查看所有表
+    show tables;
+    -- 查看部分表， 模糊匹配
+    show tables like '%s'; -- 查看以s结尾的表
+    -- 查看表的创建语句
+    show create table 表名称;
+    show create table mtdatabase\G -- 将查到的结构旋转90度 编程纵向
+    -- 查看表结构：表中的字段信息
+    desc mydatabase;
+    show colunms from mydatabase;
+    
+    -- 修改数据表
+    修改表本身和修改字段
+    修改表本身：修改表明和表选项
+    -- 修改表名
+    rename table 老表名 新表明;
+    rename table students my_students;
+    -- 修改表选项
+    alter table my_students charset utf8
+    
+    -- 修改字段
+      -- 新增字段
+        alter table 表名 add [column] 字段名 数据类型 [列属性] [位置];
+      -- 给学生表增加id,设置为第一个字段
+      alter table my_students
+      add column id int
+      first;
+      -- 修改字段
+      alter table 表明 modify 字段名 数据类型 [属性] [位置];
+      -- 将学生表中的number字段变成固定长度切放到第二个位置
+      alter table my_students
+      modify number char(10)
+      after id;
+      -- 重命名字段
+      alter table 表名 change 旧字段名 新字段名 数据类型 [属性] [位置];
+      -- 修改学生表中的gender字段为sex
+      alter table my_students change gender sex verchar(10)
+      
+      -- 删除字段
+      alter table 表名 drop 字段名;
+      -- 删除students表中的age
+      alter table my_students dop age;
+      
+      -- 删除数据表
+      drop table 表名1,表名2,...,表名n;   -- 可一次性删除多张表
+    
+    
   数据操作
+    -- 新增数据
+      -- 给全表字段插入数据
+      insert into 表名 values(值列表按照表结构的顺序)[,(值列表)]; -- 可一次行插入多条记录
+      -- 给部分字段插入数据
+      insert into 表名 (字段列表) values (值列表按照表结构的顺序)[,(值列表)];
+      
+    
  
