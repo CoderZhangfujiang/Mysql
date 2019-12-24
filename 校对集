@@ -1,0 +1,31 @@
+校对集：数据比较的方式
+校对集有三种格式
+  _bin : 二进制比较，取出二进制位，一位一位比较，区分大小写
+  _cs : 大小写敏感
+  _ci : 大小写不敏感
+产看数据库锁支持的校对集:
+-- 查看所有校对集
+show collation;
+
+
+校对集的应用:
+只有当数据产生比较的时候校对集才会生效
+
+
+-- 创建表，使用不同的校对集
+create table my_collate_bin (name char(1)) charset utf8 collate utf8_bin;
+
+create table my_collate_ci (name char(1)) charset utf 8 collate utf8_general_ci;
+-- 插入数据
+insert into my_collate_bin values ('a'),('b'),('c');
+
+insert into my_collate_ci values ('a'),('b'),('c');
+-- 排序查找：
+selecte * from my_collate_bin order by name;
+
+selecte * from my_collate_ci order by name;
+
+
+校对集必须在数据表中没有数据之前设置，表中有数据后修改校对集无效
+
+
