@@ -1,0 +1,40 @@
+SQL中将数据类型分成三大类：数据类型，字符串类型，日期时间类型
+
+数值型：
+  整数型：
+    1. tinyint  迷你整型，使用一个字节存储，表示状态最多为256种(常用)
+    2. smallint  小整型，使用两个字节存储，表示状态最多为65536种
+    3. mediumint  中整型，使用三个字节存储
+    4. int   标准整型，使用4个字节存储（常用）
+    5. bigint   长整型，使用8个字节存储
+    
+    -- 创建一张整型表
+    create table my_int(
+      int_1 tinyint,
+      int_2 smallint,
+      int_3 mediumint,
+      int_4 int,
+      int_5 bigint
+      )charset utf8;
+    -- 插入数据
+    insert into my_int values(100,100,100,100,100);   -- 有效数据
+    insert into my_int values('a','b','c','d','e');   -- 无效数据
+    insert into my_int values(300,300,300,300,300);   -- 超出范围
+  SQL中数值类型默认都是无符号数，
+  有时候需要使用无符号类型，需要给数据类型做限定，比如：  int unsigned --表示无符号标准整型数据,从0开始
+  -- 给my_int表中增加一个无符号类型字段
+  alter talble my_int add int_6 tinyint unsigned;
+  -- 指定字段的显示宽度为1
+  alter table my_int add int_7 tinyint(1) unxigned;
+  -- 指定字段的吸纳是宽度为2，并使用0填充
+  alter table my_int add int_8 tinyint(2) zerofill;   -- 使用0填充的字段强制使用无符号类型
+  小数型：
+    1. 
+    2. 
+    3. 
+    4. 
+  
+  
+  
+  
+  
