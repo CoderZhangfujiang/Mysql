@@ -115,5 +115,20 @@
       -- 给部分字段插入数据
       insert into 表名 (字段列表) values (值列表按照表结构的顺序)[,(值列表)];
       
+    -- 查看数据
+      -- 查看所有数据
+      select * from 表名;
+      -- 条件查询
+      select * from 表名 where 条件;
+    -- 更新数据
+      update 表名 set 字段=值 [where 条件];
+      -- updata my_students set sex = 'male' where name = 'Jim';
+      更新不一定会成功，比如没有需要更新的数据
+      
+   -- 删除数据
+   删除不可逆，谨慎操作
+   delete from 表名 [where 条件];
+   delete from my_student where sex = 'male';
+      
     
  
