@@ -52,8 +52,30 @@
   -- 插入数据：可以使用多个字符串，也可以使用数值
   insert into my_set values('足球,篮球,网球');
   
+  集合的强大在于能够规范数据和节省空间
   
   
+  
+  MySQL记录长度：MySQL规定任何一条记录最长不能超过65535个字节
+  varchar的实际存储长度：
+  utf8：21844
+  gbk: 32766
+  
+  MySQL记录中如果有任何一个字段允许为空，那么系统会自动从整个记录中保留一个字节来存储NULL（若想释放NULL锁占用的字节，必须保证所有的字段都不允许为空）
+  
+  -- 释放NULL
+  create table my_utf8(
+    age tinyint not null,   -- 1个字节
+    name varchar(21844) not null    -- 21844*3 + 2 = 65534个字节
+    )charset utf8;
+ 
+  
+  MySQL中text文本字符串不占用记录长度，但是text文本字符串也是属于记录的一部分，一定要占用记录中的部分长度：10个字节（保存数据的地址以及长度）
+  -- text占用10个字节长度
+  create table my_utf8(
+    name varchar(21841) not null,   -- 21841*3 + 2 = 65525个字节
+    context text not null   -- 10个字节
+    )charset utf8;
   
   
   
