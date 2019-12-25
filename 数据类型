@@ -28,11 +28,49 @@ SQL中将数据类型分成三大类：数据类型，字符串类型，日期�
   alter table my_int add int_7 tinyint(1) unxigned;
   -- 指定字段的吸纳是宽度为2，并使用0填充
   alter table my_int add int_8 tinyint(2) zerofill;   -- 使用0填充的字段强制使用无符号类型
-  小数型：
-    1. 
-    2. 
-    3. 
-    4. 
+  
+  
+  小数型：（带有小数点或者范围超出整型的数值）
+    浮点型：小数点浮动，精度有限，会丢失精度（超出指定范围后会四舍五入）
+      1. flaot  单精度，占用4个字节存储数据，精度范围大概为7位左右
+      2. double 双精度， 占用8个字节，精度范围大概为15位左右
+      创建浮点数表：直接使用flaot表示没有小数部分；float(M,D),M代表总长度，D代表小数部分长度，整数部分长度为M-D
+      -- 浮点数表
+      create table my_flaot(
+        f1 flaot,
+        f2 flaot(10, 2),    -- 在精度范围之外
+        f3 flaot(6, 2)      -- 在精度范围之内
+        )charset utf8;
+      -- 插入数据
+      insert into my_flaot values(1000.10, 1000.10, 1000.10);   -- 符合条件
+      
+      insert into my_flaot values(1234567890, 12345678.90, 1234.56);   -- 符合条件
+      
+      insert into my_flaot values(9999999999, 99999999.99, 9999.99);  -- 最大值
+      
+      insert into my_flaot values(3e38, 3.01e7, 1234.56);
+      
+      -- 超出长度插入数据（整数部分不能超出长度，小数部分可以超出长度, 如果因为小数部分四舍五入导致整数部分超出长度，系统允许）
+      insert into my_flaot values(123456, 1234.12345678, 123.98765423);   -- 小数部分超出长度
+      
+      insert into my_flaot values(123456, 1234.12, 12345.67);    -- 整数部分超出长度,插入数据失败
+      
+    定点型：小数点固定，精度固定，不会丢失精度
+    
+      -- 创建定点数表
+      create table my_decimal(
+        f1 flaot(10, 2),
+        d1 decimal(10, 2)
+        )charset utf8;
+      
+      -- 插入数据(定点数的整数部分长度一定不能超出长度（进位也不可以），小数部分可以超出,自动四舍五入)
+      insert into my_decimal values(12345678.90， 12345678.90);    -- 有效数据
+      
+      insert into my_decimal values(1234,123456, 1234,123456);    -- 小数部分超出，可以插入，但是会有警告
+      
+      insert into my_decimal values(12345678.99, 12345678.99);    -- 有效数据
+      
+      insert into my_decimal values(99999999.99, 99999999.99);    -- 定点数小数部分进位导致整数部分长度超出范围，插入失败
   
   
   
