@@ -1,0 +1,72 @@
+列属性：用来约束数据类型
+真正约束字段的是数据类型，但是数据类型的约束很单一，需要又一个额外的约束来保证数据的合法性
+
+列属性：
+  NULL/NOT NULL:
+    默认为空，咋实际开发中尽可能设置不为空
+  default:
+    默认值：某一种数据会经常性出现某个具体的值，可以在一开始旧指定好，在需要真实数据的时候，用户可以选择性的使用默认值
+    -- 默认值举例
+    create table my_default(
+      name varchar(20) not null,
+      age tinyint unsigned default 0,
+      gender enum('男','女') default '男'
+      )charset utf8;
+      
+      默认值的生效  在苏剧插入的时候不给该字段赋值
+    insert into my_default (name) values('高强');
+    insert into my_default values('李四', 18, default);
+    
+  primary key：
+    主键：一张表中只能有一个字段可以使用对应的键，用来唯一的约束该字段里面的数据，主键不能重复
+    
+    增加主键：
+      1. 在创建的时候直接在字段之后加上primary key关键字
+      -- 创建带主键的表
+      create table my_primarykey(
+        name varchar(20) not null comment '姓名',
+        number char(10) primary key comment '学号 itcast + 0000 不能重复'
+        )charset utf8;
+      2. 创建表的时候，在所有的字段之后使用primary key(主键字段列表)来创建主键，如果有多个字段称为复合主键
+      -- 复合主键
+      create table my_pri2(
+        number char(10) not null '学号 itcast + 0000 不能重复',
+        course char(10) comment '课程代码',
+        score tinyint unsigned default 60 comment '成绩',
+        -- 增加主键限制，学号和课程号具有唯一性
+        primary key(number, course)
+        )charset utf8;
+      3. 当表已经创建好之后，在此额外增加主键
+        alter tabel 表名 add primary key(字段);
+        -- 追加主键,前提是表中字段对应的数据本身不重复
+        create table my_pri3(
+          number char(10) not null '学号 itcast + 0000 不能重复',
+          course char(10) comment '课程代码',
+          )charset utf8;
+        alter table my_pri3 add primary key(number, course);
+        
+      删除主键：
+        alter table 表名 drop primary key;
+      
+      主键分类:
+        实际创建表的过程中很少使用真实的业务数据作为主键，大部分的时候使用逻辑性的字段（字段没有业务含义），将这种主键称为逻辑主键
+        -- 逻辑主键
+        create table my_student(
+          id int primary key auto_increment comment '逻辑主键， 自增长',    -- 逻辑主键
+          number varchar(10) not null,
+          name varchar(20) not null
+          )charset utf8;
+      
+    
+  unique key：
+    
+  auto_increment：
+    
+  comment:
+    列描述，没有实际意义，用来描述字段，会根据表创建语句保存，用来给数据库管理员进行了解
+    
+   -- 列描述
+   create table my_teacher(
+    name varchar(25) not null comment '姓名',
+    money decimal(10,2) not null comment '工资'
+    )charset utf8;
