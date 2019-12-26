@@ -59,8 +59,84 @@
       
     
   unique key：
+    唯一键: 一张表中往往有很多字段需要有唯一性，数据不能重复，但是一张表中只能有一个主键，唯一键就可以解决表中有多个字段需要唯一约束的问题
+      唯一键默认允许为空
+      
+    增加唯一键：
+      1. 在创建表的时候在指端之后直接跟 unique/unique key
+      -- 创建唯一键字段
+      create table my_unique1(
+        number varchar(10) unique,
+        name varchar(20) not null
+        )charset utf8;
+      2. 在所有的字段之后增加unique key(字段列表)支持复合唯一键
+      create table my_unique2(
+        number varchar(10) not null,
+        name varhar(20) not null,
+        unique key(number)
+        )charset utf8;
+      3. 在表创建成功之后，插入数据之前（表中没有数据）
+      -- 创建表
+      create table my_unique3(
+        id int primary key auto_increment,
+        number varchar(10) not null,
+        name varchar(20) not null
+        )charset utf8;
+      -- 增加唯一键
+      alter table my_unique3 add unique key(number);
     
   auto_increment：
+    自增长：当对应字段不给值或者给默认值，或者给NULL的时候，自增长会被系统触发，系统会自动+1,第一个元素默认是1
+    自增长通常是跟主键搭配
+    特点：
+      1. 任何一个自增长必须是是个索引
+      2. 自增长字段必须是整型数字
+      3. 一张表最多只能有一个自增长字段
+      -- 自增长
+      create table my_auto(
+        id int primary key auto_increment comment '自增长',
+        name varchar(10) not null
+        )charset utf8;
+        
+      自增长的使用：
+        -- 触发自增长
+        insert into my_auto(name) values('李四');   -- 不给值触发自增长
+        insert into my_auto values(null, '王麻子');    -- 给NULL，触发自增长
+        insert into my_auto values(default, '尼古拉斯');    -- 使用default，触发自增长
+      可以通过查看表创建语句来查看下一次自增长的值:
+      -- 查看表创建语句
+      show create table my_auto;
+      
+      修改自增长:
+        1. 自增长如果设计到字段改变，必须限删除自增长，后增加自增长
+        2. 修改当前自增长已经存在的值（修改只能比当前最大值大）
+        alter table 表名 auto_increment = 值;
+        -- 修改表选项的值
+        alter table my_auto auto_increment = 4;   -- 向下修改不生效
+        alter table my_auto auto_increment = 10;    -- 向上修改生效
+        
+        -- 查看自增长的系统变量
+        show variables like 'auto_increment%';
+        
+        可以修改变量实现不同的自增长步长和起始值（针对整个数据库修改，不嫩个针对单张表修改）
+        -- 修改自增长步长
+        set auto_increment_increment = 5;   -- 修改自增长步长为5
+        
+        
+      删除自增长：
+        自增长是字段的一个属性，可以通过modify来修改（）
+        alter table 表名 modify 字段名 类型;
+        -- 删除自增长
+        alter table my_auto modify id int;
+        
+      唯一键约束：
+        唯一键与主键本质相同，区别是唯一键默认允许为空（多个为空）
+        
+      更新唯一键和删除唯一键：
+        更新唯一键：先删除再新增(唯一键可以有多个)
+        删除唯一键：alter table 表名 drop index 索引名字; -- 唯一键默认使用字段名作为索引名
+        -- 删除my_unique3中的唯一键
+        alter table my_unique3 drop index number;
     
   comment:
     列描述，没有实际意义，用来描述字段，会根据表创建语句保存，用来给数据库管理员进行了解
@@ -70,3 +146,27 @@
     name varchar(25) not null comment '姓名',
     money decimal(10,2) not null comment '工资'
     )charset utf8;
+
+
+索引
+  几乎所有的索引都是建立在字段上
+  
+  索引的意义：
+    1. 提升查询效率
+    2. 约束数据的合法性（唯一性）
+    
+  增加索引的条件：
+    索引本身会产生索引文件（有时候可能比数据文件还要大），非常消耗磁盘空间
+    
+    如果某个字段需要作为查询条件经常使用，那么尽可能使用索引（一定想办法对该字段使用索引）；
+    如果某个字段需要进行数据的有效性约束，也可能使用索引（主键，唯一键）；
+    MySQL中提供了多种索引：
+      1. 主键索引： primary key
+      2. 唯一索引:  unique key
+      3. 全文索引:  fulltext index
+      4. 普通索引:  index
+    全文索引是针对文章内部的关键字进行索引
+        全文索引最大的问题在于如何确定关键字：
+          英文：很容易，单词之间有空格
+          中文： 没有空格，而且中文可以各种随意组合，难点在于分词
+      
