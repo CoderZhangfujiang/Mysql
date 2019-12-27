@@ -111,7 +111,7 @@
               create table my_personinfo(
                 id int auto_increm primary key,
                 name varchar(20) not null,
-                gender varchar(2) not null,
+                gender enum('男','女') not null,
                 height tinyint not null,
                 age tinyint not null
                 )charset utf8;
@@ -127,7 +127,27 @@
           group by 子句:
             根据某个字段分组
             select * from my_personinfo group by gender
-              
+            分组是为了统计数据（按组统计）SQL提供了一系列统计函数：
+            count(): 统计记录数
+            max():统计最大值
+            min():统计最小值
+            avg():统计平均数
+            sum():统计和
+            
+            -- 分组统计身高高矮，平均年龄和总年龄
+            select gender,count(*),max(height), min(height), avg(age), sum(age) from my_personinfo group by gender;
+            
+            count():里面可以使用两种参数，*代表统计记录，字段名代表对应的字段（NULL不统计）
+            select count(age) from my_personinfo group by gender;
+            
+            group by 字段 [asc|desc]; -- 对分组的结果按照分组字段进行排序默认升序排序
+            
+            -- group_concat(字段名) 对分组后的某个字段进行字符串连接
+            select gender,group_concat(name) from my_personinfo group by gender;
+            
+            -- 回溯统计： with rollup:任何一个分组后都会有一个小组，最后都需要向上级分组进行汇报统计，根据当前分组字段，
+            回溯统计的时候会将分组字段置空
+              select gender,count(*) from my_personinfo group by gender with rollup;
               
               
               
