@@ -149,6 +149,63 @@
             回溯统计的时候会将分组字段置空
               select gender,count(*) from my_personinfo group by gender with rollup;
               
+      having子句：
+        having子句和where子句一样，进行条件判断的
+        where是针对磁盘数据进行判断：进入到内存后会进行分组操作，分组结果就需要having来处理
+        having能处理where能做的几乎所有事情，但where不嫩工作having能做的很多事情
+        
+        分组统计的结果 或者说统计函数只有having能够使用
+        
+        -- 求出所有班级人数大于等于2的学生人数
+        select c_id,count(*)  from my_student group by c_id having count(*) >= 2;
+        
+        
+        having能够使用字段别名where不能，因为别名是数据读入内存后才有的
+        
+        -- 求出所有班级人数大于等于2的学生人数
+        select c_id,count(*) as total  from my_student group by c_id having total >= 2;   -- having可以使用别名
+        
+        
+        
+        
+    order by 子句：
+      根据某个字段进行升序或者降序进行排序，依赖校对集
+      基本语法：
+        order by 字段名 [asc/desc];  --  默认asc（升序），desc(降序)
+        
+      可以进行多字段排序： 现根据某个字段进行排序，然后再按照某个字段进行再次排序：
+        -- 多字段排序，先班级排序，后性别排序
+        select * from my_student order by c_id, gender desc;
+        
+        
+        
+    limit子句：
+      限制结果的语句：限制数量
+      两种使用方式：
+      1. 限制长度（数据量）:
+      -- 查询学生，起那两个
+      select * from my_student limit 2;
+      
+      2. 限制起始位置，限制数量： limit 起始位置，长度;
+      -- 查询学生：前两个
+      select * from my_student limit 0,2;
+      
+      -- 插叙学生，从第三个开始，找两个
+      select * from my_student limit 2,2;
+      
+      limit主要用来实现数据的分页：为用户节省时间，提高服务器的响应效率，减少资源的浪费
+      对用户来讲：可以点击分页按钮：，1，2，3，4
+      对服务器来讲：根据用户选择的野马来获取不同的数据 ： limit offset,length;
+      
+      length:每夜显示的数据量，基本不变
+      offset = (页码 - 1)*每页显示量
+        
+        
+        
+        
+
+
+              
               
               
               
